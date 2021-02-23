@@ -1,0 +1,22 @@
+@dp.message_handler(content_types=['document'])
+async def scan_message(msg: types.Message):
+    document_id = msg.document.file_id
+    file_info = await bot.get_file(document_id)
+    fi = file_info.file_path
+    name = msg.document.file_name
+    urllib.request.urlretrieve(f'https://api.telegram.org/file/bot{TOKEN}/{fi}',f'./{name}')
+    await bot.send_message(msg.from_user.id, 'Файл сохранен')
+
+---------------------------------------------------------------- 
+
+
+@dp.message_handler()
+async def not_document(msg: types.Message):
+    """"""
+    user_id = msg.from_user.id
+    file = InputFile("form_to_start/FormToFill.xlsx")    # отправить файл
+    await bot.send_message(user_id, "Sorry... Not document", reply_to_message_id=msg.message_id)
+    await bot.send_document(user_id, file)
+
+
+-----------------------------------------------------------------------
